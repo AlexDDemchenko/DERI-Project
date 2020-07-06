@@ -8,7 +8,7 @@ pip install python-secrets
 pip install pandas
 pip install opencv-python
 pip install requests
-pip install pil
+pip install Pillow
 Once you have done that, you have all the necessary libaries to run the program.
 You need to get your own API keys. Visit developer.twitter.com to obtain these. Once you have obtained your keys, you copy-paste them into the "secrets.py" file.
 Once you have downloaded the files, you open the "input.txt" file, and type the twitter usernames that you want scraped as follows:
