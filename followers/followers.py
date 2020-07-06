@@ -70,6 +70,7 @@ try:
     num_of_tweets = []
     retweet_num = []
     profile_pic = []
+    tweets_per_day = []
     final_bot_score = []
     names = name.split()
     for name in names:
@@ -93,6 +94,24 @@ try:
         bot_score = 0
         filename = user.profile_image_url.split('/')[-1]
         time_create = str(user.created_at)
+        start = 4
+        stop = 18
+        # Remove charactes from index 4 to 18
+        if len(time_create) > stop :
+            time_create = time_create[0: start:] + time_create[stop + 1::]
+        time_int = int(time_create)
+        print(time_int)
+        today_str = str(today)
+        start = 4
+        stop = 9
+        # Remove charactes from index 4 to 10
+        if len(today_str) > stop :
+            today_str = today_str[0: start:] + today_str[stop + 1::]
+        today_int = int(today_str)
+        print(today_int)
+        create_days = (today_int - time_int) * 365
+        tweet_per_day = user.statuses_count / create_days
+        tweets_per_day.append(tweet_per_day)
         if user.followers_count / user.friends_count > .5 and user.followers_count / user.friends_count < 2:
             bot_score += 2
         if user.friends_count > 5000:
@@ -101,12 +120,12 @@ try:
             bot_score += 2
         if retweet_ratio > .7:
             bot_score += 5
-        if time_create.find("2016") or time_create.find("2017") or time_create.find("2018") or time_create.find("2019") or time_create.find("2020"):
+        if time_create.find("2016") > -1 or time_create.find("2017") > -1 or time_create.find("2018") > -1 or time_create.find("2019") > -1 or time_create.find("2020") > -1:
             bot_score += 3
-        if False: 
-            bot_score += 2
-        elif False:
+        if tweet_per_day > 300: 
             bot_score += 5
+        elif tweet_per_day > 100:
+            bot_score += 2
         if filename == "default_profile_normal.png":
             bot_score += 3
         elif face_recognition(user.profile_image_url) == "No Face":
@@ -123,6 +142,7 @@ try:
             'number of tweets' : num_of_tweets,
             'Retweet Ratio' : retweet_num,
             'Profile Picture' : profile_pic,
+            "Tweets Per Day" : tweets_per_day,
             'Bot Score' : final_bot_score}
     df = pd.DataFrame(data)
     if os.path.exists('output.csv'):
