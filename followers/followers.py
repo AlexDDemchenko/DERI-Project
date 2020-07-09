@@ -15,7 +15,7 @@ with open('input.txt', 'r') as f:
     f.close()
 auth = OAuthHandler(secrets.CONSUMER_KEY,secrets.CONSUMER_SECRET)
 auth.set_access_token(secrets.ACCESS_TOKEN,secrets.ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify = True)
 today = date.today()
 account_count = 1
 def get_all_tweets(screen_name):
@@ -61,7 +61,6 @@ def face_recognition(photo):
     
 
 try:
-    
     usernames = []
     follow_c = []
     friends = []
@@ -100,7 +99,6 @@ try:
         if len(time_create) > stop :
             time_create = time_create[0: start:] + time_create[stop + 1::]
         time_int = int(time_create)
-        print(time_int)
         today_str = str(today)
         start = 4
         stop = 9
@@ -108,7 +106,6 @@ try:
         if len(today_str) > stop :
             today_str = today_str[0: start:] + today_str[stop + 1::]
         today_int = int(today_str)
-        print(today_int)
         create_days = (today_int - time_int) * 365
         tweet_per_day = user.statuses_count / create_days
         tweets_per_day.append(tweet_per_day)
