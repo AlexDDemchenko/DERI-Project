@@ -107,7 +107,10 @@ try:
             today_str = today_str[0: start:] + today_str[stop + 1::]
         today_int = int(today_str)
         create_days = (today_int - time_int) * 365
-        tweet_per_day = user.statuses_count / create_days
+        if create_days == 0:
+            create_days = 1
+        else:
+            tweet_per_day = user.statuses_count / create_days
         tweets_per_day.append(tweet_per_day)
         if user.followers_count / user.friends_count > .5 and user.followers_count / user.friends_count < 2:
             bot_score += 2
@@ -117,7 +120,7 @@ try:
             bot_score += 2
         if retweet_ratio > .7:
             bot_score += 5
-        if time_create.find("2016") > -1 or time_create.find("2017") > -1 or time_create.find("2018") > -1 or time_create.find("2019") > -1 or time_create.find("2020") > -1:
+        if time_int >= 2016:
             bot_score += 3
         if tweet_per_day > 300: 
             bot_score += 5
