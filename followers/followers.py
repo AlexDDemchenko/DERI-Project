@@ -55,16 +55,15 @@ def face_recognition(photo):
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = img[y:y+h, x:x+w]
     if len(faces) > 0:
-        return "Has A Face"
+        return True
     else:
-        return "No Face"
+        return False
     
 
 try:
     usernames = []
     follow_c = []
     friends = []
-    location = []
     creation_date = []
     num_of_tweets = []
     retweet_num = []
@@ -85,8 +84,6 @@ try:
         usernames.append(name)
         follow_c.append(user.followers_count)
         friends.append(user.friends_count)
-        location.append(user.location)
-        creation_date.append(user.created_at)
         num_of_tweets.append(user.statuses_count)
         retweet_num.append(retweet_ratio)
         profile_pic.append(face_recognition(user.profile_image_url))
@@ -107,6 +104,7 @@ try:
             today_str = today_str[0: start:] + today_str[stop + 1::]
         today_int = int(today_str)
         create_days = (today_int - time_int) * 365
+        creation_date.append(time_int)
         if create_days == 0:
             create_days = 1
         else:
@@ -128,7 +126,7 @@ try:
             bot_score += 2
         if filename == "default_profile_normal.png":
             bot_score += 3
-        elif face_recognition(user.profile_image_url) == "No Face":
+        elif face_recognition(user.profile_image_url) == False:
             bot_score += 2
         final_bot_score.append(bot_score)
         account_count += 1
@@ -137,11 +135,10 @@ try:
     data = {'username' : usernames,
             'followers': follow_c,
             'follwing' : friends,
-            'location' : location,
             'creation date' : creation_date,
             'number of tweets' : num_of_tweets,
             'Retweet Ratio' : retweet_num,
-            'Profile Picture' : profile_pic,
+            'Profile picture contains face?' : profile_pic,
             "Tweets Per Day" : tweets_per_day,
             'Bot Score' : final_bot_score}
     df = pd.DataFrame(data)
