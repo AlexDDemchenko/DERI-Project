@@ -17,136 +17,64 @@ auth = OAuthHandler(secrets.CONSUMER_KEY,secrets.CONSUMER_SECRET)
 auth.set_access_token(secrets.ACCESS_TOKEN,secrets.ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify = True)
 today = date.today()
-account_count = 1
-def get_all_tweets(screen_name):
-    #Twitter only allows access to a users most recent 3240 tweets with this method 
-    #initialize a list to hold all the tweepy Tweets
-    alltweets = []  
-    #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name,count=200)
-    #save most recent tweets
-    alltweets.extend(new_tweets)
-    #save the id of the oldest tweet less one
-    oldest = alltweets[-1].id - 1
-    #keep grabbing tweets until there are no tweets left to grab
-    while len(new_tweets) > 0:
-        print(f"getting tweets before {oldest}")
-        #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
-        #save most recent tweets
-        alltweets.extend(new_tweets)
-        #update the id of the oldest tweet less one
-        oldest = alltweets[-1].id - 1
-        print(f"...{len(alltweets)} tweets downloaded so far")
-    #transform the tweepy tweets into a 2D array that will populate the csv 
-    outtweets = [[tweet.text] for tweet in alltweets]
-    return outtweets
-
-def face_recognition(photo):
-    face_cascade = cv2.CascadeClassifier(r'C:\Users\Administrator\AppData\Local\Programs\Python\Python38\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml')
-    filename = photo.split('/')[-1]
-    r = requests.get(photo, allow_redirects=True)
-    open("photos/" + filename, 'wb').write(r.content)
-    img = cv2.imread("photos/" + filename)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.1, 1)
-    for (x,y,w,h) in faces:
-        img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = img[y:y+h, x:x+w]
-    if len(faces) > 0:
-        return True
-    else:
-        return False
-    
-
-try:
-    usernames = []
-    follow_c = []
-    friends = []
-    creation_date = []
-    num_of_tweets = []
-    retweet_num = []
-    profile_pic = []
-    tweets_per_day = []
-    final_bot_score = []
-    names = name.split()
-    for name in names:
+account_count = 0
+usernames = []
+follow_c = []
+friends = []
+favorites = []
+num_of_tweets = []
+def_profile = []
+profile_pic = []
+verified = []
+final_bot_score = []
+names = name.split()
+for name in names:
+    account_count += 1
+    print("Account No.")
+    print(account_count)
+    try:
+        bot_score = 0
         user = api.get_user(name)
-        retweet_count = 0
-        outtweets = get_all_tweets(name)
-        for tweet in outtweets:
-            for i in tweet:
-                if i.find("RT"):
-                    retweet_count += 1
-        retweet_ratio = retweet_count / len(outtweets)
-        retweet_ratio = 1 - retweet_ratio
         usernames.append(name)
         follow_c.append(user.followers_count)
         friends.append(user.friends_count)
+        favorites.append(user.favourites_count)
         num_of_tweets.append(user.statuses_count)
-        retweet_num.append(retweet_ratio)
-        profile_pic.append(face_recognition(user.profile_image_url))
-        bot_score = 0
-        filename = user.profile_image_url.split('/')[-1]
-        time_create = str(user.created_at)
-        start = 4
-        stop = 18
-        # Remove charactes from index 4 to 18
-        if len(time_create) > stop :
-            time_create = time_create[0: start:] + time_create[stop + 1::]
-        time_int = int(time_create)
-        today_str = str(today)
-        start = 4
-        stop = 9
-        # Remove charactes from index 4 to 10
-        if len(today_str) > stop :
-            today_str = today_str[0: start:] + today_str[stop + 1::]
-        today_int = int(today_str)
-        create_days = (today_int - time_int) * 365
-        creation_date.append(time_int)
-        if create_days == 0:
-            create_days = 1
-        else:
-            tweet_per_day = user.statuses_count / create_days
-        tweets_per_day.append(tweet_per_day)
-        if user.followers_count / user.friends_count > .5 and user.followers_count / user.friends_count < 2:
-            bot_score += 2
+        def_profile.append(user.default_profile)
+        profile_pic.append(user.default_profile_image)
+        verified.append(user.verified)
         if user.friends_count > 5000:
-            bot_score += 3
+            bot_score += 5
         elif user.friends_count > 1000:
-            bot_score += 2
-        if retweet_ratio > .7:
-            bot_score += 5
-        if time_int >= 2016:
             bot_score += 3
-        if tweet_per_day > 300: 
+        if user.statuses_count > 300000:
             bot_score += 5
-        elif tweet_per_day > 100:
-            bot_score += 2
-        if filename == "default_profile_normal.png":
+        elif user.statuses_count > 100000:
             bot_score += 3
-        elif face_recognition(user.profile_image_url) == False:
-            bot_score += 2
+        if user.default_profile == True:
+            bot_score += 8
+        if user.default_profile_image == True:
+            bot_score += 8
+        if user.verified == True:
+            bot_score = 0
         final_bot_score.append(bot_score)
-        account_count += 1
-        print("Account No.")
-        print(account_count)
-    data = {'username' : usernames,
-            'followers': follow_c,
-            'follwing' : friends,
-            'creation date' : creation_date,
-            'number of tweets' : num_of_tweets,
-            'Retweet Ratio' : retweet_num,
-            'Profile picture contains face?' : profile_pic,
-            "Tweets Per Day" : tweets_per_day,
-            'Bot Score' : final_bot_score}
-    df = pd.DataFrame(data)
-    if os.path.exists('output.csv'):
-        os.remove('output.csv')
-    df.to_csv('output.csv', index = False)
-except:
-    raise Exception("Username does not exist")
+    except:
+        print("username does not exist")
+        pass
+data = {'username' : usernames,
+        'followers_count': follow_c,
+        'friends_count' : friends,
+        'favorites_count' : favorites,
+        'statuses_count' : num_of_tweets,
+        'default_profile' : def_profile,
+        'default_profile_image' : profile_pic,
+        'verified' : verified,
+        'Bot Score' : final_bot_score}
+df = pd.DataFrame(data)
+if os.path.exists('output.csv'):
+    os.remove('output.csv')
+df.to_csv('output.csv', index = False)
+
 
 
 
