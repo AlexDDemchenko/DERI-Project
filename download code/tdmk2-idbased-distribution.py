@@ -13,10 +13,10 @@ import time
 
 # These are Twitter API keys that MUST be added. Visit developer.twitter.com to obtain these. You may want to
 # consider making multiple accounts, as each account is rate-limited.
-consumer_key = "UJc1xpDNnVvxjQszKR5VGjxH6"
-consumer_secret = "y0ZE4PsnhCwcuSyRVVGVSWcy2S7rl4SKHywMiYK8VFUC9nv1NY"
-access_key = "1142057661384581120-cWOpHesXKC8tgPsCWMm7oP7XE5VDVH"
-access_secret = "ho3RAWS1l8iTcvVcCLwJFz7FKjDvLplERKrOrQdlSUD8X"
+consumer_key = ""
+consumer_secret = ""
+access_key = "-"
+access_secret = ""
 
 
 
@@ -105,35 +105,35 @@ while __name__ == '__main__' and len(results) != 0: #temp_name != end:
     for res in results:
         noFails = fail #for checking if the thing failed
         if reqc == 0:
-            consumer_key = "UJc1xpDNnVvxjQszKR5VGjxH6"
-            consumer_secret = "y0ZE4PsnhCwcuSyRVVGVSWcy2S7rl4SKHywMiYK8VFUC9nv1NY"
-            access_key = "1142057661384581120-cWOpHesXKC8tgPsCWMm7oP7XE5VDVH"
-            access_secret = "ho3RAWS1l8iTcvVcCLwJFz7FKjDvLplERKrOrQdlSUD8X"
+            consumer_key = ""
+            consumer_secret = ""
+            access_key = ""
+            access_secret = ""
         if reqc == 1:
-            consumer_key = "BmvFr2NipfoCoH0YkhFTMCU4k"
-            consumer_secret = "4hChWqJNDwTFWHlRA5i7QXD4cz72rTLPbAudXEoTbTjjDg2yOH"
-            access_key = "1153349118300971009-Bgs7tD77D4JdjWEPB2mBhjfcy66c5Z"
-            access_secret = "ZCCTZ7lkUoueGkhHuSNaaYzzAs11HCyVxiBT4Egl0whGw"
+            consumer_key = ""
+            consumer_secret = ""
+            access_key = ""
+            access_secret = ""
         if reqc == 2:
-            consumer_key = "UJc1xpDNnVvxjQszKR5VGjxH6"
-            consumer_secret = "y0ZE4PsnhCwcuSyRVVGVSWcy2S7rl4SKHywMiYK8VFUC9nv1NY"
-            access_key = "1142057661384581120-cWOpHesXKC8tgPsCWMm7oP7XE5VDVH"
-            access_secret = "ho3RAWS1l8iTcvVcCLwJFz7FKjDvLplERKrOrQdlSUD8X"
+            consumer_key = ""
+            consumer_secret = ""
+            access_key = ""
+            access_secret = ""
         if reqc == 3:
-            consumer_key = "BmvFr2NipfoCoH0YkhFTMCU4k"
-            consumer_secret = "4hChWqJNDwTFWHlRA5i7QXD4cz72rTLPbAudXEoTbTjjDg2yOH"
-            access_key = "1153349118300971009-Bgs7tD77D4JdjWEPB2mBhjfcy66c5Z"
-            access_secret = "ZCCTZ7lkUoueGkhHuSNaaYzzAs11HCyVxiBT4Egl0whGw"
+            consumer_key = ""
+            consumer_secret = ""
+            access_key = ""
+            access_secret = ""
         if reqc == 4:
-            consumer_key = "UJc1xpDNnVvxjQszKR5VGjxH6"
-            consumer_secret = "y0ZE4PsnhCwcuSyRVVGVSWcy2S7rl4SKHywMiYK8VFUC9nv1NY"
-            access_key = "1142057661384581120-cWOpHesXKC8tgPsCWMm7oP7XE5VDVH"
-            access_secret = "ho3RAWS1l8iTcvVcCLwJFz7FKjDvLplERKrOrQdlSUD8X"
+            consumer_key = ""
+            consumer_secret = ""
+            access_key = ""
+            access_secret = ""
         if reqc == 5:
-            consumer_key = "BmvFr2NipfoCoH0YkhFTMCU4k"
-            consumer_secret = "4hChWqJNDwTFWHlRA5i7QXD4cz72rTLPbAudXEoTbTjjDg2yOH"
-            access_key = "1153349118300971009-Bgs7tD77D4JdjWEPB2mBhjfcy66c5Z"
-            access_secret = "ZCCTZ7lkUoueGkhHuSNaaYzzAs11HCyVxiBT4Egl0whGw"
+            consumer_key = ""
+            consumer_secret = ""
+            access_key = ""
+            access_secret = ""
             reqc = 0
         try:
             #print(len(results))
